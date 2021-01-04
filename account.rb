@@ -32,10 +32,12 @@ class Account
     # Clear all transactions, load state from file
     def reset_state
         @transactions = []
+        if pathname.exist?
         lines = File.readlines(pathname).each do |line|
             currency, amount = line.split(";")
             deposit(currency.to_sym, Float(amount))
         end
+    end
     end
 
     def deposit(currency, cents, debug = false)
@@ -68,7 +70,7 @@ class Account
             currency, amount = t
             factor = Amount.crosses[currency]
             if factor.nil?
-                raise "Invalid factor for currency #{currency}, looked in #{Currency.crosses}"
+                raise "Invalid factor for currency #{currency}, looked in #{Amount.crosses}"
             end
             result += factor*amount
         end
