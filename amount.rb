@@ -1,4 +1,4 @@
-class Currency 
+class Amount 
     include Comparable
     attr_reader :amount
 

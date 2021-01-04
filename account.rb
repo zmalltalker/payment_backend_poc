@@ -41,15 +41,15 @@ class Account
     def deposit(currency, cents, debug = false)
         @transactions << [currency, cents]
         if debug
-            amt = Currency.new(currency, cents)
+            amt = Amount.new(currency, cents)
             puts "Depositing #{amt}, balance is #{balance}"
         end
     end
 
     def withdraw(currency, cents, debug=false)
         b = balance
-        factor = Currency.crosses[currency]
-        requested = Currency.new(:rebel, (factor * cents))
+        factor = Amount.crosses[currency]
+        requested = Amount.new(:rebel, (factor * cents))
         if debug
             puts "Trying to withdraw #{requested}, balance is #{balance}"
         end
@@ -66,12 +66,12 @@ class Account
         result = 0
         @transactions.map do |t|
             currency, amount = t
-            factor = Currency.crosses[currency]
+            factor = Amount.crosses[currency]
             if factor.nil?
                 raise "Invalid factor for currency #{currency}, looked in #{Currency.crosses}"
             end
             result += factor*amount
         end
-        Currency.new(:rebel, result)
+        Amount.new(:rebel, result)
     end
 end

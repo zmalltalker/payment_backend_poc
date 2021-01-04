@@ -1,6 +1,6 @@
 require "minitest/autorun"
 require "./account"
-require "./currency"
+require "./amount"
 class AccountTest < MiniTest::Test
     def setup
         @account = Account.new("test_account")
@@ -9,13 +9,13 @@ class AccountTest < MiniTest::Test
     def test_main
         @account.deposit(:rebel, 2000)
         @account.deposit(:rebel, 2020)
-        assert_equal(Currency.new(:rebel, 4020), @account.balance)
+        assert_equal(Amount.new(:rebel, 4020), @account.balance)
     end
 
     def test_cross
         @account.deposit(:rebel, 10000)
         @account.deposit(:nok, 10000)
-        assert_equal(Currency.new(:rebel, 22000), @account.balance)
+        assert_equal(Amount.new(:rebel, 22000), @account.balance)
     end
 
     def test_withdrawal_failing
@@ -26,9 +26,9 @@ class AccountTest < MiniTest::Test
     end
 
     def test_simple_cross
-        a = Currency.new(:nok, 10000)
+        a = Amount.new(:nok, 10000)
         b = a.to_currency(:rebel)
-        expected = Currency.new(:rebel, 12000)
+        expected = Amount.new(:rebel, 12000)
         assert_equal(expected, b)
     end
 
@@ -37,7 +37,7 @@ class AccountTest < MiniTest::Test
             [:rebel, 10000],
             [:rebel, 10000]
         ])
-        assert_equal(Currency.new(:rebel, 20000), @account.balance)
+        assert_equal(Amount.new(:rebel, 20000), @account.balance)
     end
 
     def test_dump_to_file
@@ -52,6 +52,6 @@ class AccountTest < MiniTest::Test
         @account.dump_state
         @account.deposit(:rebel, 20000) # Should be ignored below
         @account.reset_state
-        assert_equal(Currency.new(:rebel, 40000), @account.balance)
+        assert_equal(Amount.new(:rebel, 40000), @account.balance)
     end
 end
