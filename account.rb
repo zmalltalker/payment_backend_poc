@@ -24,7 +24,7 @@ class Account
     def dump_state
         File.open(pathname, "w") do |f|
             @transactions.each do |currency, amount|
-                f.write("#{currency};#{amount}\n")
+                f.write("#{currency};#{amount.to_i}\n")
             end
         end
     end

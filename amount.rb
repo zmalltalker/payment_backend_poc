@@ -1,6 +1,6 @@
 class Amount 
     include Comparable
-    attr_reader :amount
+    attr_reader :amount, :currency
 
     def <=>(another)
         @amount <=> another.amount

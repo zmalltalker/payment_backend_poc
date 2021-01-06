@@ -1,6 +1,7 @@
 require "minitest/autorun"
 require "./account"
 require "./amount"
+require "./transaction"
 class AccountTest < MiniTest::Test
     def setup
         @account = Account.new("test_account")
@@ -53,5 +54,21 @@ class AccountTest < MiniTest::Test
         @account.deposit(:rebel, 20000) # Should be ignored below
         @account.reset_state
         assert_equal(Amount.new(:rebel, 40000), @account.balance)
+    end
+
+    def test_cross_transaction
+        from = Account.new("from")
+        to = Account.new("to")
+        from.deposit(:rebel, 100000)
+        result = Transaction.run(from, to, Amount.new(:rebel, 10000))
+        assert_equal Amount.new(:rebel, 10000), to.balance
+    end
+
+    def test_cross_transaction_failing
+        from = Account.new("from")
+        to = Account.new("to")
+        assert_raises Transaction::Error do
+            Transaction.run(from, to, Amount.new(:rebel, 10000))
+        end
     end
 end
